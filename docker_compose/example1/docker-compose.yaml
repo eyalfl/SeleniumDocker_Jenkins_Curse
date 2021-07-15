@@ -1,0 +1,18 @@
+version: "3"
+services:
+  nginx: 
+    image: nginx
+    container_name: nginxContainer
+  alpine1:
+    image: alpine
+    entrypoint: "ping nginx"
+    depends_on:
+      - nginx
+  alpine2:
+    image: alpine
+    entrypoint: "wget nginx"
+    working_dir: C:\eyalfl\microservices\Selenium_WebDriver_Docker_Jenkins\docker_compose\working-dir
+    volumes:
+      - C:\eyalfl\microservices\Selenium_WebDriver_Docker_Jenkins\docker_compose\volumes C:\eyalfl\microservices\Selenium_WebDriver_Docker_Jenkins\docker_compose\working-dir
+    depends_on:
+      - nginx

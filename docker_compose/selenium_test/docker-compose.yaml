@@ -1,0 +1,55 @@
+version: "3"
+services:
+  selenium-hub:
+    image: selenium/hub:3.141
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+  selenium-chrome: 
+    image: selenium/node-chrome:3.141
+    container_name: selenium-docker-chrome
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+  selenium-firefox:
+    image: selenium/node-firefox:3.141
+    container_name: selenium-node-firefox
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+  search-module:
+    image: eyalfl/selenium-docker
+    volumes:
+      - c:/eyalfl/microservices/Selenium_WebDriver_Docker_Jenkins/docker_compose/selenium_test/search_result:/usr/share/udemy/test-output
+    depends_on:
+      - selenium-chrome
+      - selenium-firefox
+    environment:
+      - BROWSER=chrome
+      - HUB_HOST=selenium-hub
+      - MODULE=search-testng.xml
+  book-flight-module:
+    image: eyalfl/selenium-docker
+    shm_size: '512m'
+    volumes:
+      - ./book_flight_result:/usr/share/udemy/test-output
+    depends_on:
+      - selenium-chrome
+      - selenium-firefox
+    environment:
+      - HUB_HOST=selenium-hub
+      - MODULE=book-flight-module-testng.xml
+  book-flight-module-firefox:
+    image: eyalfl/selenium-docker
+    volumes:
+      - ./book_flight_result-firefox:/usr/share/udemy/test-output
+    depends_on:
+      - selenium-chrome
+      - selenium-firefox
+    environment:
+      - HUB_HOST=selenium-hub
+      - BROWSER=firefox
+      - MODULE=book-flight-module-testng.xml
+  
